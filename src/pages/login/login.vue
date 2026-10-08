@@ -21,7 +21,7 @@
       <view class="field">
         <text class="label">验证码</text>
         <view class="row">
-          <input class="ipt flex" v-model="code" placeholder="验证码 1234" maxlength="6" />
+          <input class="ipt flex" v-model="code" placeholder="请输入验证码" maxlength="6" />
           <view class="code-btn" @click="sendCode">{{cd>0? cd+'s' : '获取验证码'}}</view>
         </view>
       </view>
@@ -54,12 +54,6 @@
       </block>
 
       <button class="btn-primary submit" @click="submit">{{mode==='login'?'登 录':'注 册 并 登 录'}}</button>
-
-      <view class="quick">
-        <text class="q-item" @click="quick('admin')">管理员入口</text>
-        <text class="q-item" @click="quick('recycler')">回收员入口</text>
-      </view>
-      <view class="hint">演示账号：管理员 admin / 回收员 13800000001 / 验证码 1234</view>
     </view>
   </view>
 </template>
@@ -73,6 +67,7 @@ const store = useStore()
 const mode = ref('login')
 const phone = ref('')
 const code = ref('')
+const sentCode = ref('')
 const cd = ref(0)
 const name = ref('')
 const studentId = ref('')
@@ -88,21 +83,16 @@ const sendCode = () => {
     uni.showToast({ title: '请输入正确手机号', icon: 'none' })
     return
   }
+  sentCode.value = String(Math.floor(1000 + Math.random() * 9000))
   cd.value = 60
   const t = setInterval(() => { cd.value--; if (cd.value <= 0) clearInterval(t) }, 1000)
-  uni.showToast({ title: '验证码已发送：1234', icon: 'none' })
-}
-
-const quick = (role) => {
-  phone.value = role === 'admin' ? 'admin' : '13800000001'
-  code.value = '1234'
-  mode.value = 'login'
-  submit()
+  uni.showModal({ title: '验证码', content: '您的验证码是：' + sentCode.value + '（演示用，真实环境将发短信）', showCancel: false })
 }
 
 const submit = () => {
   if (!phone.value) return uni.showToast({ title: '请输入手机号', icon: 'none' })
-  if (code.value !== '1234') return uni.showToast({ title: '验证码错误（1234）', icon: 'none' })
+  if (!sentCode.value) return uni.showToast({ title: '请先获取验证码', icon: 'none' })
+  if (code.value !== sentCode.value) return uni.showToast({ title: '验证码错误', icon: 'none' })
 
   if (mode.value === 'login') {
     const u = store.login(phone.value)
