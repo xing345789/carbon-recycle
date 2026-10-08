@@ -10,7 +10,8 @@
     <view class="panel">
       <view class="tabs">
         <view :class="['tab', mode==='login' && 'on']" @click="mode='login'">登录</view>
-        <view :class="['tab', mode==='register' && 'on']" @click="mode='register'">学生注册</view>
+        <view :class="['tab', mode==='student' && 'on']" @click="mode='student'">学生注册</view>
+        <view :class="['tab', mode==='recycler' && 'on']" @click="mode='recycler'">回收员注册</view>
       </view>
 
       <view class="field">
@@ -26,7 +27,7 @@
         </view>
       </view>
 
-      <block v-if="mode==='register'">
+      <block v-if="mode==='student'">
         <view class="field">
           <text class="label">姓名</text>
           <input class="ipt" v-model="name" placeholder="真实姓名" />
@@ -50,6 +51,13 @@
         <view class="field">
           <text class="label">宿舍号</text>
           <input class="ipt" v-model="room" placeholder="如 501" />
+        </view>
+      </block>
+
+      <block v-if="mode==='recycler'">
+        <view class="field">
+          <text class="label">姓名</text>
+          <input class="ipt" v-model="name" placeholder="真实姓名" />
         </view>
       </block>
 
@@ -98,7 +106,7 @@ const submit = () => {
     const u = store.login(phone.value)
     if (!u) return uni.showToast({ title: '用户不存在，请先注册', icon: 'none' })
     goHome(u.role)
-  } else {
+  } else if (mode.value === 'student') {
     if (!name.value || !studentId.value || studentId.value.length !== 11 || !college.value || !building.value || !room.value)
       return uni.showToast({ title: '请完整填写实名信息', icon: 'none' })
     if (store.users.find(u => u.phone === phone.value))
@@ -111,6 +119,17 @@ const submit = () => {
     store.currentUser = u
     store.persist()
     goHome('student')
+  } else {
+    if (!name.value)
+      return uni.showToast({ title: '请填写姓名', icon: 'none' })
+    if (store.users.find(u => u.phone === phone.value))
+      return uni.showToast({ title: '该手机号已注册', icon: 'none' })
+    const u = store.register({
+      role: 'recycler', phone: phone.value, name: name.value
+    })
+    store.currentUser = u
+    store.persist()
+    goHome('recycler')
   }
 }
 
