@@ -1,0 +1,44 @@
+$green-900: #1B5E20;
+$green-800: #2E7D32;
+$green-700: #388E3C;
+$green-600: #43A047;
+$green-500: #4CAF50;
+$green-100: #C8E6C9;
+$green-50: #E8F5E9;
+$bg: #F1F8E9;
+$card: #FFFFFF;
+$text: #1B3A1B;
+$muted: #6B8E6B;
+$accent: #FFA726;
+$shadow: 0 8rpx 24rpx rgba(46, 125, 50, 0.12);
+
+.card {
+  background: $card;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: $shadow;
+  margin: 24rpx;
+}
+.btn-primary {
+  background: linear-gradient(135deg, $green-600, $green-800);
+  color: #fff;
+  border-radius: 999rpx;
+  padding: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 8rpx 20rpx rgba(46,125,50,0.3);
+}
+.btn-primary::after { border: none; }
+.tag {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+.tag-pending { background: #FFF3E0; color: #E65100; }
+.tag-accepted { background: #E3F2FD; color: #1565C0; }
+.tag-completed { background: #E8F5E9; color: #2E7D32; }
+.tag-exception { background: #FFEBEE; color: #C62828; }
